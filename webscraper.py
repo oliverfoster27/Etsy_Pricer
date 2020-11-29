@@ -62,47 +62,56 @@ class WebInterface:
 
 class EtsyInterface(WebInterface):
 
-    def __init__(self, headless=True):
+    def __init__(self, search_criteria, headless=True):
         super(EtsyInterface, self).__init__(headless)
-        self.current_page = 1
+        self.current_page = 0
+        self.search_criteria = search_criteria
 
     def next_page(self):
         self.current_page += 1
-        for div in range(1, 1000):
-            for page_index in range(1, 10):
-                try:
-                    x_path = f'//*[@id="content"]/div/div[1]/div/div/div[2]/div[2]/div[4]{"/div" * div}[2]/nav/ul/li[{page_index}]'
-                    # print(x_path)
-                    if f'Page {self.current_page}' in self.get_text_by_xpath(x_path):
-                        self.xpath_click(x_path)
-                        print(f"Navigated to Page {self.current_page} (page_index: {page_index}, div: {div})")
-                        return
-                except NoSuchElementException:
-                    pass
-            if page_index > self.current_page + 100:
-                raise ValueError("Something went wrong...")
+        query = f"https://www.etsy.com/ca/search?q={self.search_criteria.replace(' ', '+')}&ref=pagination&page={self.current_page}"
+        self.go_to(query)
 
     def get_ads(self):
         ads = []
         for ad_number in itertools.count(1):
-            try:
-                ad = self.get_text(
-                    f'//*[@id="content"]/div/div[1]/div/div/div[2]/div[2]/div[3]/div/div[1]/div/li[{ad_number}]/div/a/div[2]')
-            except NoSuchElementException:
+            ad = None
+            for div1, div2 in [(2, 2), (3, 2), (2, 3), (3, 3)]:
                 try:
-                    ad = self.get_text(
-                        f'//*[@id="content"]/div/div[1]/div/div/div[2]/div[2]/div[3]/div/div[1]/div/li[{ad_number}]/div/div/a/div[2]')
-                except NoSuchElementException:
+                    ad = self.get_text_by_xpath(
+                        f'//*[@id="content"]/div/div[1]/div/div/div[{div1}]/div[2]/div[{div2}]/div/div[1]/div/li[{ad_number}]/div/a/div[2]')
                     break
-            parsed_ad = self.parse_ad(ad)
+                except NoSuchElementException:
+                    try:
+                        ad = self.get_text_by_xpath(
+                            f'//*[@id="content"]/div/div[1]/div/div/div[{div1}]/div[2]/div[{div2}]/div/div[1]/div/li[{ad_number}]/div/div/a/div[2]')
+                        break
+                    except NoSuchElementException:
+                        pass
+            if not ad and len(ads) == 0:
+                return -1
+            elif not ad:
+                return ads
+            try:
+                parsed_ad = self.parse_ad(ad)
+            except Exception as e:
+                raise ValueError(f"Exception ({e}) due to: {ad}")
             if parsed_ad != -1:
                 parsed_ad['page_num'] = self.current_page
                 parsed_ad['ad_num'] = ad_number
                 ads.append(parsed_ad)
-        return ads
 
-    @staticmethod
-    def parse_ad(ad):
+    def end_of_pages(self):
+        try:
+            if "We couldn't find any results for" in self.get_text_by_xpath(
+                    '//*[@id="content"]/div[1]/div/div/div/div/div/p'):
+                return True
+            else:
+                return False
+        except NoSuchElementException:
+            return False
+
+    def parse_ad(self, ad):
         title = re.findall('^[^\n]*', ad)[0]
         try:
             shop = re.findall('(?<=Ad\sfrom\sshop\s)(.*)(?=\n)', ad)[0]
@@ -116,7 +125,7 @@ class EtsyInterface(WebInterface):
             percent_off = re.findall('\((.*)\%\soff', ad)[0]
         except IndexError:
             if 'CA$' in ad:
-                original_price = re.findall('(?<=CA[$])(.*)(?=$|\n)', ad)[0]
+                original_price = re.findall('(?<=CA[$])([\d.,]*)(?=$|\n|\s)', ad)[0]
                 sale_price = original_price
                 percent_off = 0
             elif 'Sold' in ad:
@@ -128,10 +137,11 @@ class EtsyInterface(WebInterface):
         except IndexError:
             reviews = 0
         d = {
+            'search_criteria': self.search_criteria,
             'title': title,
             'shop': shop,
-            'original_price': float(original_price),
-            'sale_price': float(sale_price),
+            'original_price': float(str(original_price).replace(',', '')),
+            'sale_price': float(str(sale_price).replace(',', '')),
             'percent_off': float(percent_off),
             'reviews': int(str(reviews).replace(',', '')),
             'paid_ad': int(paid_ad)
