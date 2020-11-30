@@ -16,9 +16,10 @@ def parse_ads(search_criteria):
         ads = interface.get_ads()
         if ads == -1:
             print("Processing Complete: No more ads to iterate")
+            db.complete_job()
             break
         else:
-            db.insert(ads)
+            db.insert_ad(ads)
     interface.driver.quit()
 
 
@@ -26,7 +27,7 @@ def app():
     search_criteria = st.text_input('Enter your Etsy search criteria:')
     # Your thread creation code:
     if st.button('Process Job'):
-        thread = threading.Thread(target=parse_ads, args=(search_criteria, ))
+        thread = threading.Thread(target=parse_ads, args=(search_criteria, ), name=search_criteria)
         # add_report_ctx(thread)
         thread.start()
         st.text(f"Processing job '{search_criteria}'")
