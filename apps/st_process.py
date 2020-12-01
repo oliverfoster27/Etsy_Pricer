@@ -24,6 +24,7 @@ def parse_ads(search_criteria):
 
 
 def app():
+    st.markdown('# Create a Job')
     search_criteria = st.text_input('Enter your Etsy search criteria:')
     # Your thread creation code:
     if st.button('Process Job'):

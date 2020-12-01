@@ -1,5 +1,6 @@
 import sqlite3
 import pandas as pd
+import numpy as np
 
 
 class DataParent:
@@ -108,6 +109,12 @@ class DataQuery(DataParent):
         cursor = conn.cursor()
         cursor.execute("SELECT job_name, search_criteria FROM jobs")
         return cursor.fetchall()
+
+    def get_median_price(self, session_name):
+        conn = sqlite3.connect(self.db_name)
+        cursor = conn.cursor()
+        cursor.execute(f"SELECT ads.sale_price FROM ads LEFT JOIN jobs ON ads.job_id = jobs.id WHERE ads.paid_ad = 0 AND jobs.job_name = '{session_name}'")
+        return np.median([x[0] for x in cursor.fetchall()])
 
     def get_average_price(self, session_name):
         conn = sqlite3.connect(self.db_name)

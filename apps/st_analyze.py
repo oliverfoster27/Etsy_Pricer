@@ -11,6 +11,7 @@ db = DataQuery()
 
 
 def app():
+    st.markdown('# Analyze your Jobs')
     session_names = db.get_jobs()
     if len(session_names) == 0:
         st.write("There are no jobs to analyze")
@@ -22,7 +23,9 @@ def app():
             fig = px.histogram(df, x='sale_price', nbins=int(bins))
             st.plotly_chart(fig)
             avg_price = db.get_average_price(option.split(' - ')[0])
+            median_price = db.get_median_price(option.split(' - ')[0])
             st.write(f'Average Price: ${"%.2f" % avg_price}')
+            st.write(f'Median Price: ${"%.2f" % median_price}')
             ad_count = db.get_ad_count(option.split(' - ')[0])
             st.write(f'Number of Ads: {ad_count}')
         else:

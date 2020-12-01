@@ -76,7 +76,7 @@ class EtsyInterface(WebInterface):
         ads = []
         for ad_number in itertools.count(1):
             ad = None
-            for div1, div2 in [(2, 2), (3, 2), (2, 3), (3, 3)]:
+            for div1, div2 in [(2, 3), (2, 2), (3, 2), (3, 3)]:
                 try:
                     ad = self.get_text_by_xpath(
                         f'//*[@id="content"]/div/div[1]/div/div/div[{div1}]/div[2]/div[{div2}]/div/div[1]/div/li[{ad_number}]/div/a/div[2]')
