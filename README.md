@@ -7,12 +7,14 @@ price to set for new items in her Etsy store.
 [Show her some love :)](https://www.etsy.com/ca/shop/Covu).
 
 Using [Selenium](https://selenium-python.readthedocs.io/) 
-for web scraping and [Streamlit](https://www.streamlit.io/) 
+for web scraping Etsy ads and [Streamlit](https://www.streamlit.io/) 
 for front-end visualization: I created a web-app that will take an Etsy 
 search criteria and return the optimal price for your store's 
 new item. This project assumes that the optimal price is the 
 median price: any lower and shoppers will assume it's cheaply made, 
 and any more expensive shoppers will assume they are being ripped off.
+Data collected during scraping is stored locally in the file database.db using 
+[SQLite](https://www.sqlite.org/index.html). 
 
 ## Installation
 
@@ -73,6 +75,3 @@ If you navigate to this page and your job isn't posted - wait a second and click
 It is possible the job has registered but has not parsed any Etsy ads yet. This job
 will continue to update data on this page until it has parsed all ads for this criteria.
 Click refresh if you would like to see the most up-to-date data from this job.
-
-Data collected during this job is stored locally in the file database.db using 
-[SQLite](https://www.sqlite.org/index.html). 
