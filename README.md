@@ -61,13 +61,13 @@ To create a job for your search criteria, simply type the search
 into the text widget and click "Process Job". For example you can type
 "Black Turtleneck" if you would like to price for such an item:
 
-![ScreenShot](./media/run_job.png)
+![ScreenShot](./media/run_job.PNG)
 
 Once your job has started you will see the text "Processing job 'Job Name' ". 
 You should now be able to navigate back to the Analyze tab to view the progress of your
 current job:
 
-![ScreenShot](./media/analyze_job.png)
+![ScreenShot](./media/analyze_job.PNG)
 
 If you navigate to this page and your job isn't posted - wait a second and click refresh.
 It is possible the job has registered but has not parsed any Etsy ads yet. This job
