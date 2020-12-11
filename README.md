@@ -50,24 +50,24 @@ Network URL: <REDACTED>
 If this is the first time your app has run, 
 you will be directed to an empty analysis page:
 
-![alt text](./media/analyze.png)
+![ScreenShot](./media/analyze.PNG)
 
 Click on "Process" on the left navigation bar 
 and you will be taken to your job manager:
 
-![alt text](./media/process.png)
+![ScreenShot](./media/process.PNG)
 
 To create a job for your search criteria, simply type the search
 into the text widget and click "Process Job". For example you can type
 "Black Turtleneck" if you would like to price for such an item:
 
-![alt text](./media/run_job.png)
+![ScreenShot](./media/run_job.png)
 
 Once your job has started you will see the text "Processing job 'Job Name' ". 
 You should now be able to navigate back to the Analyze tab to view the progress of your
 current job:
 
-![alt text](./media/analyze_job.png)
+![ScreenShot](./media/analyze_job.png)
 
 If you navigate to this page and your job isn't posted - wait a second and click refresh.
 It is possible the job has registered but has not parsed any Etsy ads yet. This job
