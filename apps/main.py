@@ -22,7 +22,7 @@ class MultiApp:
             format_func=lambda app: app['title'])
         app['function']()
 
-
+# Instantiate MultiApp
 app = MultiApp()
 
 # Add all your application here

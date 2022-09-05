@@ -7,6 +7,7 @@ from apscheduler.executors.pool import ProcessPoolExecutor
 import plotly.express as px
 from storage import DataQuery
 
+# Instantiate DataQuery
 db = DataQuery()
 
 
