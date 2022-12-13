@@ -28,7 +28,7 @@ Now create a new python environment or activate an existing
 and install the requirements:
 
 ```
-pip install requirements.txt
+pip install -r requirements.txt
 ```
 
 ## Usage
